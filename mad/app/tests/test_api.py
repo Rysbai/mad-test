@@ -5,7 +5,7 @@ from rest_framework.test import APIClient
 
 from mad.app.exceptions import INCORRECT_LOGIN_OR_PASSWORD, USER_IS_NOT_ACTIVE
 from mad.app.tests.asserts import PatientSerializerChecker
-from mad.app.tests.factories import UserFactory, PatientFactory
+from mad.app.tests.factories import UserFactory, PatientFactory, DiagnoseFactory
 
 
 @pytest.mark.django_db
@@ -66,10 +66,11 @@ class TestPatientListAPI:
         response = api_client.get(self.url)
 
         assert response.status_code == status.HTTP_403_FORBIDDEN
-        assert response.data == "not_authenticated"
+        assert response.data["code"] == "not_authenticated"
 
     def test_should_return_last_three_patients(self, auth_api_client: APIClient):
-        patients = PatientFactory.create_batch(4)
+        diagnoses = DiagnoseFactory.create_batch(3)
+        patients = PatientFactory.create_batch(4, diagnoses=diagnoses)
         patients = reversed(patients)
 
         response = auth_api_client.get(self.url)
