@@ -33,6 +33,9 @@ JWT-токены необходимо подписывать с помощью �
 ### Run tests
 * `pytest`
 
+### Set up pre-commit
+* `pre-commit install`
+
 ## Environment variables
 | Name | Default | Description |
 |------|---------|-------------|
